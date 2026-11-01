@@ -1,0 +1,90 @@
+{
+  "name": "image-info",
+  "version": "0.1.0",
+  "apiVersion": 5,
+  "permissions": [
+    "net"
+  ],
+  "depends": {
+    "t2i": "optional"
+  },
+  "conflicts": [],
+  "commands": [
+    {
+      "name": "解析",
+      "description": "查看图片信息和拍摄位置",
+      "usage": "/解析（附带或引用图片）",
+      "aliases": [
+        "图片信息",
+        "image-info"
+      ]
+    }
+  ],
+  "regex": [],
+  "events": [],
+  "buttons": [],
+  "cron": [],
+  "routes": [],
+  "hasMiddleware": false,
+  "services": [],
+  "durableObjects": [],
+  "displayName": "图片信息",
+  "description": "提取图片 EXIF、拍摄参数和 GPS，查询地址并生成信息卡片",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "output_mode": {
+        "type": "string",
+        "title": "结果形式",
+        "enum": [
+          "auto",
+          "text"
+        ],
+        "default": "auto",
+        "description": "auto：优先 T2I 图片卡片，不可用时返回文字；text：始终返回文字。"
+      },
+      "max_image_mb": {
+        "type": "integer",
+        "title": "图片大小上限（MiB）",
+        "minimum": 1,
+        "maximum": 10,
+        "default": 4
+      },
+      "request_timeout_ms": {
+        "type": "integer",
+        "title": "单次网络请求超时（毫秒）",
+        "minimum": 1000,
+        "maximum": 8000,
+        "default": 6000
+      },
+      "geo_relay_url": {
+        "type": "string",
+        "title": "地址查询接口",
+        "default": "",
+        "description": "可选 HTTPS 接口，接收 lat/lon，返回 address 或 display_name。支持自建 Nominatim 的 /reverse；留空则尝试 BigDataCloud。坐标会发送到此服务。"
+      },
+      "geo_relay_token": {
+        "type": "string",
+        "title": "地址接口 Bearer Token",
+        "writeOnly": true,
+        "default": ""
+      },
+      "bigdatacloud_key": {
+        "type": "string",
+        "title": "BigDataCloud 服务端 API Key",
+        "writeOnly": true,
+        "default": "",
+        "description": "可选。主接口失败时查询城市/行政区；未配置任何地址服务时只显示坐标。"
+      }
+    }
+  },
+  "defaultConfig": {
+    "output_mode": "auto",
+    "max_image_mb": 4,
+    "request_timeout_ms": 6000,
+    "geo_relay_url": "",
+    "geo_relay_token": "",
+    "bigdatacloud_key": ""
+  }
+}
